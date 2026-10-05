@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { quiz } from "@/data/quizzes";
+import { week06 } from "@/data/week-06";
 
 export default function QuizPage() {
   const router = useRouter();
@@ -39,7 +39,7 @@ export default function QuizPage() {
   function startQuiz() {
     if (!nickname.trim()) return;
 
-    const preparedQuestions = shuffle(quiz.questions).map((question) => {
+    const preparedQuestions = shuffle(week06.questions).map((question) => {
         const answers = question.answers.map((answer, index) => ({
         answer,
         originalIndex: index,
@@ -66,7 +66,7 @@ export default function QuizPage() {
   if (selected !== null) return;
 
   const correct = answerIndex === question.correct;
-  const speedBonus = correct ? timeLeft * 5 : 0;
+  const speedBonus = correct ? timeLeft * 2.5 : 0;
   const points = correct ? 100 + speedBonus : 0;
 
   const newScore = score + points;
@@ -87,7 +87,7 @@ export default function QuizPage() {
   setResults(newResults);
 
   // Nếu là câu cuối
-  if (current === quiz.questions.length - 1) {
+  if (current === questions.length - 1) {
     localStorage.setItem(
       "quizResult",
       JSON.stringify({
@@ -166,7 +166,7 @@ export default function QuizPage() {
 
         <div className="flex justify-between items-center mb-5">
           <span className="text-sm text-slate-400">
-            Câu {current + 1}/{quiz.questions.length}
+            Câu {current + 1}/{questions.length}
           </span>
 
           <span className="font-bold">
@@ -178,7 +178,7 @@ export default function QuizPage() {
           <div
             className="bg-white h-2 rounded-full transition-all"
             style={{
-              width: `${((current + 1) / quiz.questions.length) * 100}%`,
+              width: `${((current + 1) / questions.length) * 100}%`,
             }}
           />
         </div>
