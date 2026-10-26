@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { week08 } from "@/data/week-08";
+import { week09 } from "@/data/week-09";
 
 export default function QuizPage() {
   const router = useRouter();
   function shuffle(array) {
     return [...array].sort(() => Math.random() - 0.5);
-}
+  }
 
   const [nickname, setNickname] = useState("");
   const [started, setStarted] = useState(false);
@@ -39,103 +39,98 @@ export default function QuizPage() {
   function startQuiz() {
     if (!nickname.trim()) return;
 
-    const preparedQuestions = shuffle(week08.questions).map((question) => {
-        const answers = question.answers.map((answer, index) => ({
+    const preparedQuestions = shuffle(week09.questions).map((question) => {
+      const answers = question.answers.map((answer, index) => ({
         answer,
         originalIndex: index,
-        }));
+      }));
 
-        const shuffledAnswers = shuffle(answers);
+      const shuffledAnswers = shuffle(answers);
 
-        return {
+      return {
         ...question,
         answers: shuffledAnswers.map((item) => item.answer),
         correct: shuffledAnswers.findIndex(
-            (item) => item.originalIndex === question.correct
+          (item) => item.originalIndex === question.correct
         ),
-        };
+      };
     });
 
     setQuestions(preparedQuestions);
 
     localStorage.setItem("nickname", nickname.trim());
     setStarted(true);
-}
-
-  function handleAnswer(answerIndex) {
-  if (selected !== null) return;
-
-  const correct = answerIndex === question.correct;
-  const speedBonus = correct ? timeLeft * 2.5 : 0;
-  const points = correct ? 100 + speedBonus : 0;
-
-  const newScore = score + points;
-
-  const newResult = {
-    question: question.question,
-    selected: answerIndex,
-    correct: question.correct,
-    points,
-    reference: question.reference,
-    explanation: question.explanation,
-  };
-
-  const newResults = [...results, newResult];
-
-  setSelected(answerIndex);
-  setScore(newScore);
-  setResults(newResults);
-
-  // Nếu là câu cuối
-  if (current === questions.length - 1) {
-    localStorage.setItem(
-      "quizResult",
-      JSON.stringify({
-        nickname,
-        score: newScore,
-        results: newResults,
-      })
-    );
-
-    const leaderboard = JSON.parse(
-      localStorage.getItem("leaderboard") || "[]"
-    );
-
-    leaderboard.push({
-      nickname,
-      score: newScore,
-      correct: newResults.filter(
-        (item) => item.selected === item.correct
-      ).length,
-    });
-
-    localStorage.setItem(
-      "leaderboard",
-      JSON.stringify(leaderboard)
-    );
-
-    setTimeout(() => {
-      router.push("/result");
-    }, 1200);
-
-    return;
   }
 
-  // Chuyển sang câu tiếp theo
-  setTimeout(() => {
-    setCurrent((old) => old + 1);
-    setSelected(null);
-    setTimeLeft(20);
-  }, 1200);
-}
+  function handleAnswer(answerIndex) {
+    if (selected !== null) return;
+
+    const correct = answerIndex === question.correct;
+    const speedBonus = correct ? timeLeft * 2.5 : 0;
+    const points = correct ? 100 + speedBonus : 0;
+
+    const newScore = score + points;
+
+    const newResult = {
+      question: question.question,
+      selected: answerIndex,
+      correct: question.correct,
+      points,
+      reference: question.reference,
+      explanation: question.explanation,
+    };
+
+    const newResults = [...results, newResult];
+
+    setSelected(answerIndex);
+    setScore(newScore);
+    setResults(newResults);
+
+    // Nếu là câu cuối
+    if (current === questions.length - 1) {
+      localStorage.setItem(
+        "quizResult",
+        JSON.stringify({
+          nickname,
+          score: newScore,
+          results: newResults,
+        })
+      );
+
+      const leaderboard = JSON.parse(
+        localStorage.getItem("leaderboard") || "[]"
+      );
+
+      leaderboard.push({
+        nickname,
+        score: newScore,
+        correct: newResults.filter(
+          (item) => item.selected === item.correct
+        ).length,
+      });
+
+      localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+
+      setTimeout(() => {
+        router.push("/result");
+      }, 1200);
+
+      return;
+    }
+
+    // Chuyển sang câu tiếp theo
+    setTimeout(() => {
+      setCurrent((old) => old + 1);
+      setSelected(null);
+      setTimeLeft(20);
+    }, 1200);
+  }
 
   if (!started) {
     return (
       <main className="min-h-screen bg-slate-950 text-white flex items-center justify-center p-6">
         <div className="w-full max-w-md">
-          <h1 className="text-3xl font-bold mb-3">
-            Sẵn sàng chưa? 🎮
-          </h1>
+          <h1 className="text-3xl font-bold mb-3">Sẵn sàng chưa? 🎮</h1>
 
           <p className="text-slate-400 mb-8">
             Nhập nickname để bắt đầu.
@@ -163,15 +158,12 @@ export default function QuizPage() {
   return (
     <main className="min-h-screen bg-slate-950 text-white p-5">
       <div className="max-w-xl mx-auto">
-
         <div className="flex justify-between items-center mb-5">
           <span className="text-sm text-slate-400">
             Câu {current + 1}/{questions.length}
           </span>
 
-          <span className="font-bold">
-            ⏱️ {timeLeft}s
-          </span>
+          <span className="font-bold">⏱️ {timeLeft}s</span>
         </div>
 
         <div className="w-full bg-slate-800 rounded-full h-2 mb-8">
