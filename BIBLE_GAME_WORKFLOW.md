@@ -41,6 +41,15 @@ Mỗi tuần **bắt buộc cập nhật đủ 3 file**:
 
 Không được bỏ sót bất kỳ file nào trong 3 file trên.
 
+### 3.1. Chỉ hiển thị 3 tuần trên giao diện
+
+Trong `data/weeks.js`, giao diện chỉ hiển thị đúng 3 tuần:
+- Tuần trước: trạng thái `Đã đóng`.
+- Tuần hiện tại: trạng thái `Đang mở`.
+- Tuần kế tiếp: trạng thái `Sắp mở`.
+
+Khi cập nhật sang tuần mới, loại tuần cũ nhất khỏi danh sách hiển thị và thêm tuần kế tiếp. Chỉ loại khỏi mảng dùng cho giao diện; **không xóa file dữ liệu câu hỏi hoặc lịch sử các tuần cũ** trong repository.
+
 ### 4. Kiểm tra trước khi commit/push
 
 Đây là bước bắt buộc:
