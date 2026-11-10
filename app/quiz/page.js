@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { week10 } from "@/data/week-10";
+import { week11 } from "@/data/week-11";
 
 export default function QuizPage() {
   const router = useRouter();
@@ -39,7 +39,7 @@ export default function QuizPage() {
   function startQuiz() {
     if (!nickname.trim()) return;
 
-    const preparedQuestions = shuffle(week10.questions).map((question) => {
+    const preparedQuestions = shuffle(week11.questions).map((question) => {
       const answers = question.answers.map((answer, index) => ({
         answer,
         originalIndex: index,
